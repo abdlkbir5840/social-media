@@ -23,24 +23,22 @@ const findByEmail = async (email) => {
   return user;
 };
 
-const createUserWithProfile = async ({ username, email, hashedPassword, location, occupation, bio="" } ) => {
+const createUserWithProfile = async ({ username, email, hashedPassword, location, city, occupation } ) => {
   const newUser = await prisma.user.create({
     data: {
       username: username,
       email: email,
       password: hashedPassword,
-      location: location,
       occupation: occupation,
-      impressions:0,
-      viewedProfile:0,
       profile: {
         create: {
-          bio:bio,
+          location: location,
+          city: city,
         },
       },
     },
     include: {
-      profile: true,
+      profile:true,
       profileImg: true,
     },
   });
@@ -48,19 +46,17 @@ const createUserWithProfile = async ({ username, email, hashedPassword, location
   return newUser;
 };
 
-const createUserWithProfileAndImage = async ({ username, email, hashedPassword, location, occupation, bio, imagePath="" } ) => {
+const createUserWithProfileAndImage = async ({ username, email, hashedPassword, location, city, occupation, imagePath="" } ) => {
   const newUser = await prisma.user.create({
     data: {
       username: username,
       email: email,
       password: hashedPassword,
-      location: location,
       occupation: occupation,
-      impressions:0,
-      viewedProfile:0,
       profile: {
         create: {
-          bio:bio,
+          location: location,
+          city: city,
         },
       },
       profileImg: {
@@ -70,7 +66,7 @@ const createUserWithProfileAndImage = async ({ username, email, hashedPassword, 
       },
     },
     include: {
-      profile: true,
+      profile:true,
       profileImg: true,
     },
   });

@@ -1,8 +1,8 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const { verify_access_token } = require("../middlewares/verifyToken.middleware");
-const { searchUser } = require("../controllers/user.controller");
-const userRouter = express.Router();
+const { follow, unfollow, searchFriend } = require("../controllers/friend.controller");
+const friendRouter = express.Router();
 
 const createProfileValidation = [
     body("username").notEmpty().withMessage('Username is required'),
@@ -12,9 +12,14 @@ const createProfileValidation = [
     body('city').notEmpty().withMessage('City is required')
   ]
 // verify token
-userRouter.use(verify_access_token);
+friendRouter.use(verify_access_token);
+//get all
+friendRouter.route('/').get()
+// in qeury { followerId, followingId }
+friendRouter.route('/follow').post(follow)
+// in qeury { followerId, followingId }
+friendRouter.route('/unfollow').delete(unfollow)
+// in qeury { name }
+friendRouter.route('/searchFrienf').get(searchFriend)
 
-// in qeury { name, filters{person, post, photos, pages, groups,} }
-userRouter.route('/searchFrienf').get(searchUser)
-
-module.exports = {userRouter}
+module.exports = {friendRouter}

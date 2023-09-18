@@ -1,22 +1,9 @@
-
-/* Profile Management */
-
-const profileManagement = async () => {
-    
-}
-
-/* Friends Management */
-
-const follow = async () => {
-
-}
-
-const unfollow = async () => {
-    
-}
-
-const searchFriend = async () => {
-     
-}
-
-/* User Search */
+  /* User Search */
+  
+  const searchUser = async (req, res, next) => {
+    res.json({ name: req.query.name });
+  };
+  
+  module.exports = {
+    searchUser,
+  };

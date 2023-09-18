@@ -12,7 +12,7 @@ const {
 
 const registerUser = async (user, pictuer) => {
   const url = path.join(__dirname, "..", "public/assets/");
-  const { username, email, password, location, occupation, bio } = await user;
+  const { username, email, password, location, city, occupation } = await user;
 
   //Verify user already exits
   const existingUser = await findByEmail(email);
@@ -23,7 +23,6 @@ const registerUser = async (user, pictuer) => {
   // hash password
   const hashedPassword = await bcrypt.hash(password, 10);
   if (pictuer?.profileImg) {
-    console.log('tttttttttttttttttttttt')
     const { profileImg } = pictuer;
     // I will modify this code later
     // add the photo to flicker
@@ -36,8 +35,9 @@ const registerUser = async (user, pictuer) => {
       email,
       hashedPassword,
       location,
+      city,
       occupation,
-      bio,
+      // bio,
       imagePath,
     });
     return newUser;
@@ -50,8 +50,9 @@ const registerUser = async (user, pictuer) => {
       email,
       hashedPassword,
       location,
+      city,
       occupation,
-      bio,
+      // bio,
     });
     return newUser;
   }

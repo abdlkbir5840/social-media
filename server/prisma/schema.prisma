@@ -17,10 +17,9 @@ model User {
   username      String
   email         String       @unique
   password      String       @unique
-  location      String
-  impressions   Int
-  occupation    String
-  viewedProfile Int?
+  impressions   Int          @default(0)
+  occupation    String       @default("")
+  viewedProfile Int?         @default(0)
   profileImg    Image?
   posts         Post[]
   followedBy    Friend[]     @relation("following") // Relationship with friends
@@ -31,7 +30,7 @@ model User {
 
 model Post {
   id        Int      @id @default(autoincrement())
-  content   String
+  content   String   @default("")
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
   images    Image[]
@@ -50,18 +49,20 @@ model Friend {
 
 model UserProfile {
   id                 Int         @id @default(autoincrement())
-  bio                String
+  bio                String      @default("")
+  location           String
+  city               String
   schooling          Schooling[]
-  relationshipStatus String @default("") 
+  relationshipStatus String      @default("")
   user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId             Int         @unique
 }
 
 model Schooling {
   id            Int         @id @default(autoincrement())
-  school        String
-  diploma       String
-  userProfile   UserProfile @relation(fields: [userProfileId], references: [id])
+  school        String      @default("")
+  diploma       String      @default("")
+  userProfile   UserProfile @relation(fields: [userProfileId], references: [id], onDelete: Cascade)
   userProfileId Int
 }
 

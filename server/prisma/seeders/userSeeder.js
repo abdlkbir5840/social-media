@@ -10,7 +10,6 @@ async function seedUsers() {
       username: faker.internet.userName(),
       email: faker.internet.email(),
       password: bcrypt.hashSync(faker.internet.password(), 10), // Générez un mot de passe haché aléatoire
-      location: faker.address.city(),
       impressions: faker.random.number({ min: 1, max: 10 }),
       viewedProfile: faker.random.number({ min: 1, max: 10 }),
       occupation: faker.name.jobTitle(),

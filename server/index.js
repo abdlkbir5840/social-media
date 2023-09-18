@@ -10,6 +10,9 @@ const fileUpload = require('express-fileupload');
 const prisma = require('./prisma/prisma');
 const authRouter = require("./routes/auth.routes");
 const { errorHandler } = require("./middlewares/error.middleware");
+const { userRouter } = require("./routes/user.routes");
+const { profileRouter } = require("./routes/profile.routes");
+const { friendRouter } = require("./routes/friend.routes");
 
 // Global config
 dotenv.config();
@@ -25,20 +28,18 @@ app.use(fileUpload());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Routes
-app.use('/api/v1', authRouter)
+app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/user/profiles', profileRouter)
+app.use('/api/v1/user/friends', friendRouter)
 
 // Error Handling
 app.use(errorHandler);
 
 app.post('/api/v1/test',async(req, res)=>{
-  const { username, email, password, location, occupation, bio } = req.body;
-  const newUser = await prisma.user.create({
-    data: {
-      username: username,
-      email: email,
-      password: password,
-      location: location,
-      occupation: occupation,
+  // const { username, email, password, location, occupation, bio } = req.body;
+  const newUser = await prisma.UserProfile.findMany({
+    include:{
+      schooling: true,
     }
   }); 
   res.json(newUser)

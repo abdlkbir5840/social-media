@@ -10,6 +10,15 @@ const errorHandler = (error, req, res, next) => {
         stackTrace: error.stack,
       });
       break;
+    case 404:
+      res.status(statusCode).json({
+        Title: "Not Found",
+        message: error.message,
+        error: error.details,
+        timstamp: new Date(),
+        stackTrace: error.stack,
+      });
+      break;
     case 409:
       res.status(statusCode).json({
         Title: "Conflict Error",
