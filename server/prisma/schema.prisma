@@ -22,8 +22,8 @@ model User {
   viewedProfile Int?         @default(0)
   profileImg    Image?
   posts         Post[]
-  followedBy    Friend[]     @relation("following") // Relationship with friends
-  following     Friend[]     @relation("follower") // Reverse relationship to users who are friends with this user
+  followers     Friend[]     @relation("following") // users who have chosen to follow your account.
+  following     Friend[]     @relation("follower") // users you choose to follow
   profile       UserProfile?
   likes         Like[]
 }
@@ -40,11 +40,12 @@ model Post {
 }
 
 model Friend {
-  id          Int  @id @default(autoincrement())
-  follower    User @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
-  followerId  Int
-  following   User @relation("follower", fields: [followingId], references: [id], onDelete: Cascade)
-  followingId Int
+  id         Int  @id @default(autoincrement())
+  follower   User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId Int
+  followed   User @relation("following", fields: [followedId], references: [id], onDelete: Cascade)
+  followedId Int
+  status      String @default("pending") // "pending", "accepted", "rejected"
 }
 
 model UserProfile {

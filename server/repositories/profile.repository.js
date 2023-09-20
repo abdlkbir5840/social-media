@@ -38,6 +38,21 @@ const findSchoolById = async (schoolId, profileId) => {
   return school;
 };
 
+const createSchool = async (profileId, schoolDetails) => {
+  const school = await prisma.schooling.create({
+    data: {
+      school: schoolDetails.school,
+      diploma: schoolDetails.diploma,
+      userProfile: {
+        connect: {
+          id: parseInt(profileId),
+        },
+      },
+    },
+  });
+  return school;
+};
+
 const updateSchool = async (schoolId, schoolDetails) => {
   const school = await prisma.schooling.update({
     where: {
@@ -51,20 +66,21 @@ const updateSchool = async (schoolId, schoolDetails) => {
   return school;
 };
 
-const createSchool = async (profileId, schoolDetails) => {
-    const school = await prisma.schooling.create({
-      data: {
-        userProfileId: parseInt(profileId),
-        school: schoolDetails.school,
-        diploma: schoolDetails.diploma,
-      },
-    });
-    return school;
-  };
+const deleteSchool = async (schoolId, userProfileId) => {
+  const school = await prisma.schooling.delete({
+    where: {
+      id: parseInt(schoolId),
+      userProfileId: parseInt(userProfileId)
+    },
+  });
+  return school;
+};
+
 module.exports = {
   findProfileById,
   updateProfile,
   findSchoolById,
+  createSchool,
   updateSchool,
-  createSchool
+  deleteSchool
 };

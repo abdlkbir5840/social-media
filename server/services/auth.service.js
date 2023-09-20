@@ -13,7 +13,6 @@ const {
 const registerUser = async (user, pictuer) => {
   const url = path.join(__dirname, "..", "public/assets/");
   const { username, email, password, location, city, occupation } = await user;
-
   //Verify user already exits
   const existingUser = await findByEmail(email);
   if (existingUser) {
@@ -37,12 +36,10 @@ const registerUser = async (user, pictuer) => {
       location,
       city,
       occupation,
-      // bio,
       imagePath,
     });
     return newUser;
   } else {
-    console.log('yyyyyyyyyyyyyyyyyyyyyyy')
 
     // Create User With Profile
     const newUser = await createUserWithProfile({
@@ -70,7 +67,7 @@ const loginUser = async (user) => {
   const isMatch = await bcrypt.compare(password, existingUser.password);
   if (!isMatch) {
     //if dasen't mach throw error
-    throw new CustomError("Authentication failed not correct ", 401);
+    throw new CustomError("Authentication failed", 401);
   }
   //create an access toekn for user
   const accessToken = jwt.sign(
@@ -116,7 +113,7 @@ const refreshUuser =  async (cookie) => {
       }
       const existingUser = await findById(decoded.userInfo.id);
       if (!existingUser) {
-        throw new error("User not found", 401);
+        throw new CustomError("User not found", 401);
       }
       //create access token for user
       access_token = jwt.sign(

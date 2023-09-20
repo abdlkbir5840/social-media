@@ -6,8 +6,8 @@ const dotenv = require("dotenv");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const path = require("path");
-const fileUpload = require('express-fileupload');
-const prisma = require('./prisma/prisma');
+const fileUpload = require("express-fileupload");
+const prisma = require("./prisma/prisma");
 const authRouter = require("./routes/auth.routes");
 const { errorHandler } = require("./middlewares/error.middleware");
 const { userRouter } = require("./routes/user.routes");
@@ -18,7 +18,7 @@ const { friendRouter } = require("./routes/friend.routes");
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
@@ -28,24 +28,54 @@ app.use(fileUpload());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // Routes
-app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/user/profiles', profileRouter)
-app.use('/api/v1/user/friends', friendRouter)
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user/profiles", profileRouter);
+app.use("/api/v1/user/friends", friendRouter);
 
 // Error Handling
 app.use(errorHandler);
 
-app.post('/api/v1/test',async(req, res)=>{
-  // const { username, email, password, location, occupation, bio } = req.body;
-  const newUser = await prisma.UserProfile.findMany({
-    include:{
-      schooling: true,
+app.post("/api/v1/test", async (req, res) => {
+  // const {  } = req.body;
+  // const friend = await prisma.friend.create({
+  //   data: {
+  //     follower: { connect: { id: parseInt(req.query.followerId) } },
+  //     followed: { connect: { id: parseInt(req.query.followedId) } },
+  //   },
+  // });
+  const test = await prisma.friend.findFirst({
+    where:{
+      followerId:parseInt(req.query.followerId),
+      followedId:parseInt(req.query.followedId),
     }
-  }); 
-  res.json(newUser)
-})
-const port = process.env.PORT || 50001;
+  })
+  // const kamal = await prisma.user.findFirst({
+  //   where: {
+  //     id: parseInt(req.query.followerId),
+  //   },
+  //   select: {
+  //     id: true,
+  //     username: true,
+  //     email: true,
+  //     impressions: true,
+  //     occupation: true,
+  //     viewedProfile: true,
+  //     followers:{
+  //       select:{
+  //         follower:true
+  //       }
+  //     },
+  //     following:{
+  //       select:{
+  //         followed:true
+  //       }
+  //     }
+  //   },
+  // });
 
+  res.json({ test: test });
+});
+const port = process.env.PORT || 50001;
 
 prisma
   .$connect()
@@ -58,4 +88,3 @@ prisma
   .catch((error) => {
     console.error("Database connection error:", error);
   });
-

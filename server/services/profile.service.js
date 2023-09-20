@@ -1,5 +1,5 @@
 const CustomError = require("../exceptions/CustomError");
-const { updateProfile, findProfileById, findSchoolById, updateSchool, createSchool } = require("../repositories/profile.repository")
+const { updateProfile, findProfileById, findSchoolById, updateSchool, createSchool, deleteSchool } = require("../repositories/profile.repository")
 
 const updateUserProfile = async (userId, profileId,profileDetails) => {
     const existingProfile = await findProfileById(profileId, userId)
@@ -31,4 +31,17 @@ const createUserProfileSchool = async (userId,profileId, schoolDetails) => {
     const school = await createSchool(profileId,schoolDetails);
     return school;
 }
-module.exports = {updateUserProfile, updateUserProfileSchool, createUserProfileSchool}
+
+const deleteUserProfileSchool = async (userId,profileId, schoolId) => {
+    const existingProfile = await findProfileById(profileId, userId)
+    if(!existingProfile){
+        throw new CustomError('Profile not found', 404);
+    }
+    const existingSchool = await findSchoolById(schoolId, profileId)
+    if(!existingSchool){
+        throw new CustomError('School not found', 404);
+    }
+    const school = await deleteSchool(schoolId, profileId);
+    return school;
+}
+module.exports = {updateUserProfile, updateUserProfileSchool, createUserProfileSchool, deleteUserProfileSchool}
